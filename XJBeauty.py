@@ -3,12 +3,8 @@ from Utils import is_xmllint_installed, is_jq_installed, isLinux
 from Utils import is_json_file, is_xml_file
 import os
 import subprocess
+import argparse
 
-XML = 1
-JSON = 2
-XMLJSON = 3
-JSONXML = 3
-BOTH = 3
 
 class XJBeauty():
     _log = init_logger('XJBeauty')
@@ -20,7 +16,6 @@ class XJBeauty():
 
         init_path(self._output_path)
         init_path(self._input_path)
-        pass
 
     def test(self):
         if isLinux() and is_jq_installed() and is_xmllint_installed():
@@ -44,21 +39,57 @@ class XJBeauty():
     def _beauty_XML(self, filename):
         self._log.debug('XML beauti %s' % filename)
 
-        command = 'xmllint --format --output %s%s %s%s' %(self._output_path, filename, self._input_path, filename)
-        self._log.debug(command)
-        os.system(command)
+        output_file = '%s%s' % (self._output_path, filename)
+        input_file = '%s%s' % (self._input_path, filename)
 
+        popen = subprocess.Popen(args=['xmllint', '--format', '--output', output_file, input_file],
+                                 stderr=subprocess.PIPE,
+                                 stdout=subprocess.PIPE)
+
+        output, error = popen.communicate()
+
+        self._log.debug('output: %s' % output)
+        self._log.debug('error: %s' % error)
+        self._log.debug('returncode: %s' % popen.returncode)
+
+        #TODO: validation of success
 
     def _beauty_JSON(self, filename):
         self._log.debug('JSON beauti %s' % filename)
 
-        command = 'jq \'\' %s%s > %s%s' % (self._input_path, filename, self._output_path, filename)
-        self._log.debug(command)
-        os.system(command)
+        input_file = '%s%s' % (self._input_path, filename)
+        output_file = '%s%s' % (self._output_path, filename)
+
+        popen = subprocess.Popen(args=['jq', '''''', input_file],
+                                 stderr=subprocess.PIPE,
+                                 stdout=subprocess.PIPE)
+
+        output, error = popen.communicate()
+
+        output = output.decode()
+        error = error.decode()
+
+        self._log.debug('output: %s' % output)
+        self._log.debug('error: %s' % error)
+        self._log.debug('returncode: %s' % popen.returncode)
+
+        if error == '' and output != '':
+            with open(output_file, 'w') as file:
+                file.write(output)
+        else:
+            self._log.error('There is nothing to save and error occures: %s' % error)
 
 
 if __name__ == '__main__':
-    xj_beauty = XJBeauty('both')
+    parser = argparse.ArgumentParser(description='This tool can be used to simple and fast parse xml and json files.'
+                                                 'Only on linux. jq and xmllind are required.')
+    parser.add_argument('--mode', choices=['xml', 'json', 'both', 'xmljson', 'jsonxml'], default='both')
+    parser.add_argument('--inputFolder' ,default='./input/')
+    parser.add_argument('--outputFolder', default='./output/')
+
+    arguments = parser.parse_args()
+
+    xj_beauty = XJBeauty(arguments.mode, input_path=arguments.inputFolder, output_path=arguments.outputFolder)
     xj_beauty.run()
 
 
