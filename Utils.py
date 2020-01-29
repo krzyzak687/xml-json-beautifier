@@ -54,10 +54,14 @@ def isLinux():
         return False
 
 def is_xmllint_installed():
-    popen = subprocess.Popen(args = ['xmllint', '--version'], stderr=subprocess.PIPE,)
-    stderr = popen.stderr.readlines()
+    popen = subprocess.Popen(args = ['xmllint', '--version'], stderr=subprocess.PIPE)
+    output, errors = popen.communicate()
 
-    if 'xmllint: using libxml' in str(stderr[0]):
+    print('aaa'+ str(output))
+    print('aaa'+ errors.decode())
+
+
+    if 'xmllint: using libxml' in errors.decode():
         return True
     else:
         return False
