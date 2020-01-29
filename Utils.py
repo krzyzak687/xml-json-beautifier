@@ -54,17 +54,21 @@ def isLinux():
         return False
 
 def is_xmllint_installed():
-    completedprocess = subprocess.CompletedProcess(args = ['xmllint', '--version'], returncode=0)
+    popen = subprocess.Popen(args = ['xmllint', '--version'], stderr=subprocess.PIPE,)
+    stderr = popen.stderr.readlines()
 
-    if completedprocess.returncode == 0:
+    if 'xmllint: using libxml' in str(stderr[0]):
         return True
     else:
         return False
 
-def is_jq_installed():
-    completedprocess = subprocess.CompletedProcess(args = ['jq', '--version'], returncode=0)
 
-    if completedprocess.returncode == 0:
+
+def is_jq_installed():
+    popen = subprocess.Popen(args = ['jq', '--version'], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    output, errors = popen.communicate()
+
+    if 'jq' in str(output.decode()) and str(errors.decode()) == '':
         return True
     else:
         return False
