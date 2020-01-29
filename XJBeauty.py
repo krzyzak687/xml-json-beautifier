@@ -5,9 +5,11 @@ import os
 import subprocess
 import argparse
 
+LOG_LEVEL = 'DEBUG'
+LOG_LEVEL = 'INFO'
 
 class XJBeauty():
-    _log = init_logger('XJBeauty')
+    _log = init_logger('XJBeauty', LOG_LEVEL)
 
     def __init__(self, mode, input_path='./input/', output_path='./output/'):
         self._input_path = input_path
@@ -84,12 +86,14 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='This tool can be used to simple and fast parse xml and json files.'
                                                  'Only on linux. jq and xmllind are required.')
     parser.add_argument('--mode', choices=['xml', 'json', 'both', 'xmljson', 'jsonxml'], default='both')
-    parser.add_argument('--inputFolder' ,default='./input/')
-    parser.add_argument('--outputFolder', default='./output/')
-
+    parser.add_argument('--input_folder' ,default='./input/')
+    parser.add_argument('--output_folder', default='./output/')
+    parser.add_argument('--log_level',choices=['DEBUG', 'INFO'], default='INFO')
     arguments = parser.parse_args()
 
-    xj_beauty = XJBeauty(arguments.mode, input_path=arguments.inputFolder, output_path=arguments.outputFolder)
+    LOG_LEVEL = arguments.log_level
+
+    xj_beauty = XJBeauty(arguments.mode, input_path=arguments.input_folder, output_path=arguments.output_folder)
     xj_beauty.run()
 
 
