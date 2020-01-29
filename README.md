@@ -1,7 +1,7 @@
 # xml-json-beautifier
 Program recogenize file type (xml or json) and beautify it.
 
-## Instalation
+## Installation
 
 ### Clone repository
 `$git clone git@github.com:krzyzak687/xml-json-beautifier.git`
@@ -16,4 +16,10 @@ Program recogenize file type (xml or json) and beautify it.
 `(xml-json-beautifier)$pip install -r requirements`
 
 ## Usage
-`soon...`
+### Input/Output data
+Rare (not formatted) files provide to default input catalog: `./input/`.
+Formatted files appear in default output catalog: `./output/`
+### Runprogram
+`(xml-json-beautifier)$python ./XJbeauty.py`
+### Customization - read help
+`(xml-json-beautifier)$python ./XJbeauty.py --help``
