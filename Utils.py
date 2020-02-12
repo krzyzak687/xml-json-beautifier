@@ -14,7 +14,7 @@ def init_path(path):
 
 def init_logger(logger_name,
                 logger_level=logging.DEBUG,
-                logger_formatter = logging.Formatter("%(asctime)-15s %(levelname)s %(name)s %(message)s")):
+                logger_formatter = logging.Formatter("%(asctime)-15s Process-%(process)d %(levelname)s %(name)s %(message)s")):
 
     init_path(LOG_PATH)
 
