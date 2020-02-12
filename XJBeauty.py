@@ -35,12 +35,12 @@ class XJBeauty():
     def run(self):
         if self.test():
             file_list = os.listdir(self._input_path)
-            process_pool = pp.ProcessPool(4)
+            process_pool = pp.ProcessPool(8)
             process_pool.map(self._beauty_worker, file_list)
             # map(self._beauty_worker, file_list)
 
     def _beauty_worker(self, filename):
-        self._log.info('Current processing file: %s' % filename)
+        self._log.debug('Current processing file: %s' % filename)
         if is_json_file(filename):
             self._beauty_JSON(filename)
         elif is_xml_file(filename):
