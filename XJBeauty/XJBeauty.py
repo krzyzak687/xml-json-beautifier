@@ -1,7 +1,8 @@
-from Utils import init_path, init_logger
-from Utils import is_xmllint_installed, is_jq_installed, isLinux
-from Utils import is_json_file, is_xml_file
-from Utils import TimeElapsedCounter
+from Utils.Utils import init_path, init_logger
+from Utils.Utils import is_xmllint_installed, is_jq_installed, isLinux
+from Utils.Utils import is_json_file, is_xml_file
+from Utils.TimeElapsedCounter import TimeElapsedCounter
+
 import os
 import subprocess
 import argparse
